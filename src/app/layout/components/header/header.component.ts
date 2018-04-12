@@ -96,7 +96,6 @@ export class HeaderComponent implements OnInit {
     }
 
     save(result: string){
-
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         this.http.post('http://localhost:8088/PortfolioManagement/api/trade/', this.trade, options).subscribe(res => {
@@ -106,16 +105,13 @@ export class HeaderComponent implements OnInit {
                 alert("Saved Successfully");
                 window.location.reload();
             }else{
-                alert("Error occured: Status" + res.status + " Status Text: " + res.statusText);
+                alert("Error Status not 200: Check console for more information.");
                 console.log(res);
             }
         },
           err => {
             alert("Error occured: Check console for more information.");
             console.log("Error occured: " + err);
-          });
-
-        console.log(JSON.stringify(this.trade));
-        
+          });      
     }
 }
