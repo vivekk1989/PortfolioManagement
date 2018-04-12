@@ -1,16 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+
+import { Trade } from "../trade";
+import { Subject } from 'rxjs/Subject';
+
+import {NgbDateAdapter, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateNativeAdapter } from '../../../shared/services/ngbDateNativeAdapter';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}]
 })
+
 export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
+    closeResult: string;
 
-    constructor(private translate: TranslateService, public router: Router) {
+    modalReference: NgbModalRef;
+    trade = new Trade();
+    stocks: string[] = [];
+    
+
+    constructor(private translate: TranslateService, public router: Router, private modalService: NgbModal, private http: Http) {
 
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
         this.translate.setDefaultLang('en');
@@ -26,9 +42,14 @@ export class HeaderComponent implements OnInit {
                 this.toggleSidebar();
             }
         });
+
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.stocks = ['SUZLON', 'PNB', 'RELIANCE'];
+    }
+
+    get diagnostic() { return JSON.stringify(this.trade); }
 
     isToggled(): boolean {
         const dom: Element = document.querySelector('body');
@@ -51,5 +72,50 @@ export class HeaderComponent implements OnInit {
 
     changeLang(language: string) {
         this.translate.use(language);
+    } 
+
+    open(content) {
+        this.modalReference = this.modalService.open(content, { size: 'lg',  centered: true});
+        this.modalReference.result.then((result) => {
+            this.closeResult = `Closed with: ${result}`;
+            console.log(this.closeResult);
+        }, (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+            console.log(this.closeResult);
+        });
+    }
+
+    private getDismissReason(reason: any): string {
+        if (reason === ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        } else {
+            return  `with: ${reason}`;
+        }
+    }
+
+    save(result: string){
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        this.http.post('http://localhost:8088/PortfolioManagement/api/trade/', this.trade, options).subscribe(res => {
+            if(res.status == 200){
+                this.trade.clearAllData();
+                this.modalReference.close(result);
+                alert("Saved Successfully");
+                window.location.reload();
+            }else{
+                alert("Error occured: Status" + res.status + " Status Text: " + res.statusText);
+                console.log(res);
+            }
+        },
+          err => {
+            alert("Error occured: Check console for more information.");
+            console.log("Error occured: " + err);
+          });
+
+        console.log(JSON.stringify(this.trade));
+        
     }
 }

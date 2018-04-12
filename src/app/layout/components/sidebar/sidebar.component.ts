@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-sidebar',
@@ -11,8 +12,9 @@ export class SidebarComponent {
     isActive: boolean = false;
     showMenu: string = '';
     pushRightClass: string = 'push-right';
+    closeResult: string;
 
-    constructor(private translate: TranslateService, public router: Router) {
+    constructor(private translate: TranslateService, public router: Router, private modalService: NgbModal) {
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de']);
         this.translate.setDefaultLang('en');
         const browserLang = this.translate.getBrowserLang();
@@ -62,5 +64,23 @@ export class SidebarComponent {
 
     onLoggedout() {
         localStorage.removeItem('isLoggedin');
+    }
+
+    open(content) {
+        this.modalService.open(content).result.then((result) => {
+            this.closeResult = `Closed with: ${result}`;
+        }, (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });
+    }
+
+    private getDismissReason(reason: any): string {
+        if (reason === ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        } else {
+            return  `with: ${reason}`;
+        }
     }
 }

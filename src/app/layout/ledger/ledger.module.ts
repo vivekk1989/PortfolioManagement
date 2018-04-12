@@ -5,11 +5,14 @@ import { LedgerRoutingModule } from './ledger-routing.module';
 import { LedgerComponent } from './ledger.component';
 import { PageHeaderModule } from '../../shared';
 
+import { DataTablesModule } from 'angular-datatables';
+
 @NgModule({
   imports: [
     CommonModule,
     LedgerRoutingModule,
-    PageHeaderModule
+    PageHeaderModule,
+    DataTablesModule
   ],
   declarations: [LedgerComponent]
 })

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg fixed-top">
-    <a class="navbar-brand" href="#">SB Admin Angular5 BS4 </a>
+    <a class="navbar-brand" href="#">Portfolio Management </a>
     <button class="navbar-toggler" type="button" (click)="toggleSidebar()">
         <!-- <span class="navbar-toggler-icon"></span> -->
         <i class="fa fa-bars text-muted" aria-hidden="true"></i>
@@ -17,6 +17,146 @@
                     RTL/LTR
                 </a>
             </li> &nbsp;
+            <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link mt-1"
+                        style="padding: 0.375rem 1rem !important; border-color: #999;"
+                        (click)="open(content)"
+                    >
+                    <span><i class="fa fa-plus"></i>&nbsp; Add Trade</span>
+                    </a>
+                    <ng-template #content let-c="close" let-d="dismiss">
+                            <form role="form" (ngSubmit)="save('save Clicked')" #tradeForm="ngForm">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Trade</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <label for="type" class="col-4 col-form-label">Type</label>
+                                    <div class="col-8">
+                                        <select class="form-control" [(ngModel)]="trade.type" (ngModelChange)="trade.clearOtherTypeData($event)" name="type" id="type" required>
+                                            <option>Futures</option>
+                                            <option>Option</option>
+                                            <option>PayIn</option>
+                                            <option>PayOut</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tradeDate" class="col-4 col-form-label">Date</label>
+                                    <div class="col-8">
+                                        <div class="input-group datepicker-input">
+                                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                                id="tradeDate" name="tradeDate" [(ngModel)]="trade.tradeDate" ngbDatepicker #d="ngbDatepicker" #c1="ngModel" required>
+                                            <button class="input-group-addon" (click)="d.toggle()" type="button">
+                                                <span class="fa fa-calendar"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="trade.type ==='Futures' || trade.type ==='Option'">
+                                    <div class="form-group row">
+                                        <label for="stockName" class="col-4 col-form-label">Stock Name</label>
+                                        <div class="col-8">
+                                            <select class="form-control" [(ngModel)]="trade.stockName" name="stockName" id="stockName" required>
+                                                <option *ngFor="let stock of stocks" [value]="stock">{{stock}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="lotSize" class="col-4 col-form-label">Lot Size</label>
+                                        <div class="col-8">
+                                            <input class="form-control" type="number" step="1" [(ngModel)]="trade.lotSize" name="lotSize" id="lotSize" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="noOfLots" class="col-4 col-form-label">No of Lots</label>
+                                        <div class="col-8">
+                                            <input class="form-control" type="number" step="1" [(ngModel)]="trade.noOfLots" name="noOfLots" id="noOfLots" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="price" class="col-4 col-form-label">Price</label>
+                                        <div class="col-8">
+                                            <input class="form-control" type="number" step=".01" [(ngModel)]="trade.price" name="price" id="price" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="brokerage" class="col-4 col-form-label">Brokerage</label>
+                                        <div class="col-8">
+                                            <input class="form-control" type="number" step=".01" [(ngModel)]="trade.brokerage" name="brokerage" id="brokerage" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label for="shortLong" class="col-4 col-form-label">Short/Long</label>
+                                        <div class="col-4">
+                                            <label class="radio-inline">
+                                                <input type="radio" value="Short" name="shortLong" [(ngModel)]="trade.shortLong" required>Short
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="radio-inline">
+                                                <input type="radio" value="Long" name="shortLong" [(ngModel)]="trade.shortLong" required>Long
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="trade.type ==='Option'">
+                                        <div class="form-group row">
+                                            <label for="strikePrize" class="col-4 col-form-label">Strike Prize</label>
+                                            <div class="col-8">
+                                                <input class="form-control" type="number" step=".01" [(ngModel)]="trade.strikePrize" name="strikePrize" id="strikePrize" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="putCall" class="col-4 col-form-label">Put/Call</label>
+                                            <div class="col-4">
+                                                <label class="radio-inline">
+                                                    <input type="radio" value="Put" name="putCall" [(ngModel)]="trade.putCall" required>Put
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="radio-inline">
+                                                    <input type="radio" value="Call" name="putCall" [(ngModel)]="trade.putCall" required>Call
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="expiryDate" class="col-4 col-form-label">Expiry Date</label>
+                                        <div class="col-8">
+                                            <div class="input-group datepicker-input">
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                    name="expiryDate" [(ngModel)]="trade.expiryDate" ngbDatepicker #d="ngbDatepicker" required>
+                                                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                                                    <span class="fa fa-calendar"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="trade.type ==='PayIn' || trade.type ==='PayOut'">
+                                    <div class="form-group row">
+                                        <label for="amount" class="col-4 col-form-label">Amount</label>
+                                        <div class="col-8">
+                                            <input class="form-control" type="number" step=".01" [(ngModel)]="trade.amount" name="amount" id="amount" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-secondary" [disabled]="!tradeForm.form.valid">Save</button>
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+                            </div>
+                        </form>
+                        </ng-template>
+                </li> &nbsp;
+
             <li class="nav-item dropdown" ngbDropdown>
                 <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
                     <i class="fa fa-envelope"></i> <b class="caret"></b><span class="sr-only">(current)</span>
@@ -27,7 +167,7 @@
                             src="http://i.huffpost.com/gadgets/slideshows/461162/slide_461162_6224974_sq50.jpg" alt="Generic placeholder image"
                         >
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1">John Smith</h5>
+                            <h5 class="mt-0 mb-1">Vivek Kaliannan</h5>
                             <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                             <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
@@ -38,7 +178,7 @@
                             alt="Generic placeholder image"
                         >
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1">John Smith</h5>
+                            <h5 class="mt-0 mb-1">Vivek Kaliannan</h5>
                             <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                             <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
@@ -49,7 +189,7 @@
                             alt="Generic placeholder image"
                         />
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1">John Smith</h5>
+                            <h5 class="mt-0 mb-1">Vivek Kaliannan</h5>
                             <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                             <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
@@ -91,7 +231,7 @@
             </li>
             <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-user"></i> John Smith <b class="caret"></b>
+                    <i class="fa fa-user"></i> Vivek Kaliannan <b class="caret"></b>
                 </a>
                 <div class="dropdown-menu-right" ngbDropdownMenu>
                     <a class="dropdown-item" href="javascript:void(0)">
