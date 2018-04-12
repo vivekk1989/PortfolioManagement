@@ -3,62 +3,30 @@
     <div class="row">
         <div class="col col-xl-12 col-lg-12">
         <div class="card mb-3">
-            <div class="card-header">Striped Rows</div>
+            <div class="card-header">Ledger</div>
             <div class="card-body table-responsive">
-                <table class="table table-hover table-striped">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Details</th>
-                        <th>Credit</th>
-                        <th>Debit</th>
-                        <th>Balance</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                      <tr>
-                          <td>01.01.2018</td>
-                          <td>detail1</td>
-                          <td>100</td>
-                          <td>0</td>
-                          <td>100</td>
-                      </tr>
-                    </tbody>
+                        <tr>
+                          <th>date</th>
+                          <th>details</th>
+                          <th>credit</th>
+                          <th>debit</th>
+                          <th>balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let ledger of ledgers">
+                          <td>{{ ledger.date  | date}}</td>
+                          <td>{{ ledger.details }}</td>
+                          <td>{{ ledger.credit }}</td>
+                          <td>{{ ledger.debit }}</td>
+                          <td>{{ ledger.balance }}</td>
+                        </tr>
+                        <tr *ngIf="ledgers?.length == 0">
+                          <td colspan="5" class="no-data-available">No data!</td>
+                        </tr>
+                      </tbody>
                 </table>
             </div>
         </div>

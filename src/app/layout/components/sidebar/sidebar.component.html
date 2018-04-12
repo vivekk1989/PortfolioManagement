@@ -20,6 +20,23 @@
             <a (click)="rltAndLtr()" class="list-group-item">
                 <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
             </a>
+            <a (click)="open(content)" class="list-group-item">
+                <span><i class="fa fa-plus"></i>&nbsp; Add Trade</span>
+            </a>
+            <ng-template #content let-c="close" let-d="dismiss">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+                    </div>
+                </ng-template>
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('languages')">
                     <span><i class="fa fa-language"></i>&nbsp; {{ 'Language' | translate }} <b class="caret"></b></span>
@@ -41,7 +58,7 @@
             </div>
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('profile')">
-                    <span><i class="fa fa-user"></i>&nbsp; John Smith</span>
+                    <span><i class="fa fa-user"></i>&nbsp; Vivek Kaliannan</span>
                 </a>
                 <li class="nested" [class.expand]="showMenu === 'profile'">
                     <ul class="submenu">
