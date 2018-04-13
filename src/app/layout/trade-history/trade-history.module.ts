@@ -5,11 +5,14 @@ import { TradeHistoryRoutingModule } from './trade-history-routing.module';
 import { TradeHistoryComponent } from './trade-history.component';
 import { PageHeaderModule } from '../../shared';
 
+import { DataTablesModule } from 'angular-datatables';
+
 @NgModule({
   imports: [
     CommonModule,
     TradeHistoryRoutingModule,
-    PageHeaderModule
+    PageHeaderModule,
+    DataTablesModule
   ],
   declarations: [TradeHistoryComponent]
 })

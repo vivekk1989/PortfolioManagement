@@ -1,3 +1,35 @@
-<p>
-  Page 4 works!
-</p>
+<div [@routerTransition]>
+    <app-page-header [heading]="'Trade History'" [icon]="'fa-history'"></app-page-header>
+    <div class="row">
+        <div class="col col-xl-12 col-lg-12">
+        <div class="card mb-3">
+            <div class="card-header">Trade History</div>
+            <div class="card-body table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <thead>
+                        <tr>
+                          <th>date</th>
+                          <th>details</th>
+                          <th>credit</th>
+                          <th>debit</th>
+                          <th>balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let tradeHistory of tradeHistories">
+                          <td>{{ tradeHistory.date  | date}}</td>
+                          <td>{{ tradeHistory.details }}</td>
+                          <td>{{ tradeHistory.credit }}</td>
+                          <td>{{ tradeHistory.debit }}</td>
+                          <td>{{ tradeHistory.balance }}</td>
+                        </tr>
+                        <tr *ngIf="tradeHistories?.length == 0">
+                          <td colspan="5" class="no-data-available">No data!</td>
+                        </tr>
+                      </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>

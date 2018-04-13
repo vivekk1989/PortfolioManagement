@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { DataTableDirective } from 'angular-datatables';
+
 import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
-import { DataTableDirective } from 'angular-datatables';
 import 'rxjs/add/operator/map';
 
 class Ledger {

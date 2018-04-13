@@ -6,6 +6,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { Trade } from "../trade";
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
 
 import {NgbDateAdapter, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateNativeAdapter } from '../../../shared/services/ngbDateNativeAdapter';
@@ -46,8 +47,23 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.stocks = ['SUZLON', 'PNB', 'RELIANCE'];
+       // this.stocks = ['SUZLON', 'PNB', 'RELIANCE'];
+        this.http.get('http://localhost:8088/PortfolioManagement/api/stocks/')
+            .map(this.extractData)
+            .subscribe(th => {
+                this.stocks = th;
+                console.log(this.stocks);
+            },
+            error => {
+                console.log(error);
+            }
+        );
     }
+
+    private extractData(res: Response) {
+        const body = res.json();
+        return body || {};
+      }
 
     get diagnostic() { return JSON.stringify(this.trade); }
 
